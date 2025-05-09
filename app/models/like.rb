@@ -15,11 +15,9 @@ class Like < ApplicationRecord
   validates(:photo_id, { 
     :uniqueness => { :scope => [:fan_id] }
   })
-
-  # Association accessor methods to define:
-  
   ## Direct associations
 
+  
   # Like#fan: returns a row from the users table associated to this like by the fan_id column
 
   # Like#photo: returns a row from the photo table associated to this like by the photo_id column
