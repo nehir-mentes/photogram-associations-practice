@@ -32,21 +32,21 @@ class User < ApplicationRecord
   has_many(:received_follow_request, class_name:"Follow_Request", foreign_key:"recipient_id", primary_key:"id")
   # User#received_follow_requests: returns rows from the follow requests table associated to this user by the recipient_id column
 
-  ### Scoped direct associations
+  ## Scoped direct associations
 
+  has_many(:accepted_sent_follow_requests, -> { where(status: "accepted") }, class_name:"Follow_Request", foreign_key:"sender_id")
   # User#accepted_sent_follow_requests: returns rows from the follow requests table associated to this user by the sender_id column, where status is 'accepted'
-
+  has_many(:accepted_received_follow_requests, -> { where(status: "accepted") }, class_name:"Follow_Request", foreign_key:"recipient_id")
   # User#accepted_received_follow_requests: returns rows from the follow requests table associated to this user by the recipient_id column, where status is 'accepted'
 
-
   ## Indirect associations
-
+  
+  has_many(:liked_photos, through: :likes, source: :photo)
   # User#liked_photos: returns rows from the photos table associated to this user through its likes
-
+  has_many(:commented_photos, through: :comments, source: :photo)
   # User#commented_photos: returns rows from the photos table associated to this user through its comments
 
-
-  ### Indirect associations built on scoped associations
+  ## Indirect associations built on scoped associations
 
   # User#followers: returns rows from the users table associated to this user through its accepted_received_follow_requests (the follow requests' senders)
 
