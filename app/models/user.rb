@@ -29,7 +29,7 @@ class User < ApplicationRecord
   # User#likes: returns rows from the likes table associated to this user by the fan_id column
   has_many(:sent_follow_requests, class_name:"FollowRequest", foreign_key:"sender_id", primary_key:"id")
   # User#sent_follow_requests: returns rows from the follow requests table associated to this user by the sender_id column
-  has_many(:received_follow_request, class_name:"FollowRequest", foreign_key:"recipient_id", primary_key:"id")
+  has_many(:received_follow_requests, class_name:"FollowRequest", foreign_key:"recipient_id", primary_key:"id")
   # User#received_follow_requests: returns rows from the follow requests table associated to this user by the recipient_id column
 
   ## Scoped direct associations
