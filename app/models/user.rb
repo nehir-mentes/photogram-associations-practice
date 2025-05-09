@@ -36,7 +36,7 @@ class User < ApplicationRecord
 
   has_many(:accepted_sent_follow_requests, -> { where(status: "accepted") }, class_name:"Follow_Request", foreign_key:"sender_id")
   # User#accepted_sent_follow_requests: returns rows from the follow requests table associated to this user by the sender_id column, where status is 'accepted'
-  has_many(:accepted_received_follow_requests, -> { where(status: "accepted") }, class_name:"Follow_Request", foreign_key:"recipient_id")
+  has_many(:accepted_received_follow_requests, :conditions  => { :status => "accepted" }, class_name:"Follow_Request", foreign_key:"recipient_id")
   # User#accepted_received_follow_requests: returns rows from the follow requests table associated to this user by the recipient_id column, where status is 'accepted'
 
   ## Indirect associations
@@ -48,11 +48,13 @@ class User < ApplicationRecord
 
   ## Indirect associations built on scoped associations
 
+  has_many(:followers, through: :accepted_received_follow_requests, source: :sender)
   # User#followers: returns rows from the users table associated to this user through its accepted_received_follow_requests (the follow requests' senders)
-
+  has_many(:leaders, through: :accepted_sent_follow_requests, source: :recipient)
   # User#leaders: returns rows from the users table associated to this user through its accepted_sent_follow_requests (the follow requests' recipients)
 
+  has_many(:feed, through: :leaders ,source: :own_photos)
   # User#feed: returns rows from the photos table associated to this user through its leaders (the leaders' own_photos)
-
+  has_many(:discover, through: :leaders ,source: :liked_photos)
   # User#discover: returns rows from the photos table associated to this user through its leaders (the leaders' liked_photos)
 end
