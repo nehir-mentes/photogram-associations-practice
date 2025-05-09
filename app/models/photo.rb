@@ -14,18 +14,17 @@
 
 class Photo < ApplicationRecord
   validates(:poster, { :presence => true })
-
-  # Association accessor methods to define:
-  
   ## Direct associations
 
+  belongs_to(:poster, class_name:"User", foreign_key:"owner_id"))
   # Photo#poster: returns a row from the users table associated to this photo by the owner_id column
-
+  has_many(:comments, class_name:"Comment", foreign_key:"photo_id")
   # Photo#comments: returns rows from the comments table associated to this photo by the photo_id column
-
+  has_many(:likes, class_name:"Like", foreign_key:"photo_id")
   # Photo#likes: returns rows from the likes table associated to this photo by the photo_id column
 
   ## Indirect associations
 
+  has_many(:fans, through:likes, source:user)
   # Photo#fans: returns rows from the users table associated to this photo through its likes
 end
